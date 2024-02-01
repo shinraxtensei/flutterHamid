@@ -17,30 +17,31 @@ class HamidApp extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Hamid '),
       ),
-      body: SingleChildScrollView(
+      body:const  SingleChildScrollView(
+
         child: Column(
           children: [
-            const ImageSection(image: 'assets/images/darkhamid.jpeg'),
-            GridView.count(
-              shrinkWrap: true,
-              crossAxisCount: 5,
-              children: List.generate(10, (index) {
-                return const Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Column(
-                    children: [
-                      Icon(Icons.star, color: Colors.blue),
-                      Text('hamid '),
-                    ],
-                  ),
-                );
-              }),
-            ),
-            const CardExample(),
-            const Cardtouchable(),
-            const TitleSection(name: "Hamid", location: "Ifrane"),
-            const ButtonSection(),
-            const TextSection(
+             ImageSection(image: 'assets/images/darkhamid.jpeg'),
+            // GridView.count(
+            //   shrinkWrap: true,
+            //   crossAxisCount: 5,
+            //   children: List.generate(10, (index) {
+            //     return const Padding(
+            //       padding: EdgeInsets.all(10),
+            //       child: Column(
+            //         children: [
+            //           Icon(Icons.star, color: Colors.blue),
+            //           Text('hamid '),
+            //         ],
+            //       ),
+            //     );
+            //   }),
+            // ),
+             CardExample(),
+             Cardtouchable(),
+             TitleSection(name: "Hamid", location: "Ifrane"),
+             ButtonSection(),
+             TextSection(
                 description:
                     "the Black Swordsman: A formidable warrior marked by a tragic past, he wields a massive sword named Dragon Slayer."
                     " Battling demonic forces and inner demons, Guts seeks purpose and redemption."),
@@ -207,10 +208,11 @@ class CardExample extends StatelessWidget {
     return Center(
       child: Card(
         child: Column(
+          
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             const ListTile(
-              title: Center(child: Text('hamid wa3r')),
+              title: Center(child: Text('hamid jkgkjubvbjv')),
               subtitle: Center(child: Text('wach hamid wa3r')),
             ),
             Row(
@@ -284,5 +286,7 @@ class InheritedWidgetExample extends InheritedWidget {
   bool updateShouldNotify(InheritedWidgetExample oldWidget) =>
       data != oldWidget.data;
 }
+
+
 
 
