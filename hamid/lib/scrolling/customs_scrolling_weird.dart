@@ -89,8 +89,11 @@ class CollapsingList extends StatelessWidget {
       delegate: _SliverAppBarDelegate(
         minHeight: 60.0,
         maxHeight: 200.0,
-        child: Container(
-            color: Colors.lightBlue, child: Center(child: Text(headerText))),
+        child: Image.asset(
+          'assets/images/darkhamid.jpeg',
+          fit: BoxFit.cover,
+        ),
+        // color: Colors.lightBlue, child: Center(child: Text(headerText))),
       ),
     );
   }

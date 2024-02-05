@@ -1,11 +1,12 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:hamid/scrolling/customs_scrolling_weird.dart';
 
 void main() => runApp(
       const MaterialApp(
         title: 'Hamid App',
-        home: CustomScrollViewHamid(),
+        home: CustomScrollingWeird(),
         debugShowCheckedModeBanner: false,
       ),
     );
@@ -18,13 +19,9 @@ class CustomScrollViewHamid extends StatefulWidget {
 }
 
 class _CustomScrollViewHamidState extends State<CustomScrollViewHamid> {
-
-Future<void> _handleRefresh() async {
-
+  Future<void> _handleRefresh() async {
     await Future.delayed(const Duration(seconds: 1));
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   @override
@@ -36,21 +33,23 @@ Future<void> _handleRefresh() async {
         child: CustomScrollView(
           slivers: <Widget>[
             SliverAppBar(
-              title: const Center(
-                
-              ),
+              title: const Center(),
               backgroundColor: Colors.red.shade900,
-        
+
               actions: [
                 IconButton(
                   onPressed: () {},
-                  icon: const Icon(Icons.add, 
-                  color: Colors.white,),
+                  icon: const Icon(
+                    Icons.add,
+                    color: Colors.white,
+                  ),
                 ),
                 IconButton(
                   onPressed: () {},
-                  icon: const Icon(Icons.airplanemode_on_rounded , 
-                  color: Colors.white,),
+                  icon: const Icon(
+                    Icons.airplanemode_on_rounded,
+                    color: Colors.white,
+                  ),
                 ),
               ],
               stretch: true,
