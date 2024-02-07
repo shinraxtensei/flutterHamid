@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 const Color darkBlue = Color.fromARGB(255, 18, 32, 47);
 
 void main() {
+  debugPaintSizeEnabled = false;
   runApp(const Paralax());
 }
 
@@ -12,12 +14,12 @@ class Paralax extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData.dark().copyWith(scaffoldBackgroundColor: darkBlue),
-      debugShowCheckedModeBanner: false,
-      home: const Scaffold(
-        body: Center(
-          child: ExampleParallax(),
+    return SafeArea(
+      child: MaterialApp(
+        theme: ThemeData.dark().copyWith(scaffoldBackgroundColor: darkBlue),
+        debugShowCheckedModeBanner: false,
+        home: const Scaffold(
+          body: ExampleParallax(),
         ),
       ),
     );
@@ -31,17 +33,87 @@ class ExampleParallax extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          for (final location in locations)
-            LocationListItem(
-              imageUrl: location.imageUrl,
-              name: location.name,
-              country: location.place,
+    return CustomScrollView(
+      slivers: [
+        SliverAppBar(
+          expandedHeight: 200.0,
+          elevation: 10,
+          stretch: true,
+          floating: true,
+          pinned: true,
+          //if stretch is true, the title will be shown only when the appbar is expanded
+
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          flexibleSpace: FlexibleSpaceBar(
+            centerTitle: true,
+            title: const Padding(
+              padding:  EdgeInsets.only(right: 40),
+              child:  Text('Gallery Hamid'),
             ),
-        ],
-      ),
+            stretchModes: const [
+              StretchMode.zoomBackground,
+              StretchMode.fadeTitle
+            ],
+            collapseMode: CollapseMode.parallax,
+            background: Stack(
+              fit: StackFit.expand,
+              children: [
+                Image.asset(
+                  'assets/images/gradiant.jpg', // Replace with your background image
+                  fit: BoxFit.cover,
+                ),
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      CircleAvatar(
+                        backgroundImage:
+                            AssetImage('assets/images/darkhamid.jpeg'),
+                        radius: 60,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          '',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 24,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        SliverPadding(
+          padding: const EdgeInsets.all(8.0),
+          sliver: SliverList(
+            delegate: SliverChildListDelegate(
+              [
+                const TextField(
+                  decoration: InputDecoration(  
+                    icon: Icon(Icons.search),
+                    border: UnderlineInputBorder(),
+                    labelText: 'Search',
+                  ),
+                ),
+                for (final location in locations)
+                  LocationListItem(
+                    imageUrl: location.imageUrl,
+                    name: location.name,
+                    country: location.place,
+                  ).animate().fade(delay: 500.ms).slideX(),
+                const SizedBox(
+                  height: 100,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -65,14 +137,28 @@ class LocationListItem extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       child: AspectRatio(
         aspectRatio: 16 / 9,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(16),
-          child: Stack(
-            children: [
-              _buildParallaxBackground(context),
-              _buildGradient(),
-              _buildTitleAndSubtitle(),
-            ],
+        child: GestureDetector(
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) {
+                  return Details(imageUrl: imageUrl);
+                },
+              ),
+            );
+          },
+          child: Hero(
+            tag: imageUrl,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Stack(
+                children: [
+                  _buildParallaxBackground(context),
+                  _buildGradient(),
+                  _buildTitleAndSubtitle(),
+                ],
+              ),
+            ),
           ),
         ),
       ),
@@ -92,11 +178,6 @@ class LocationListItem extends StatelessWidget {
           key: _backgroundImageKey,
           fit: BoxFit.cover,
         ),
-        // Image.network(
-        //   imageUrl,
-        //   key: _backgroundImageKey,
-        //   fit: BoxFit.cover,
-        // ),
       ],
     );
   }
@@ -319,6 +400,52 @@ class RenderParallax extends RenderBox
   }
 }
 
+bool isImageUrlInLocations(String imageUrl) {
+  for (var location in locations) {
+    if (location.imageUrl == imageUrl) {
+      return true;
+    }
+  }
+  return false;
+}
+
+class Details extends StatelessWidget {
+  const Details({Key? key, required this.imageUrl}) : super(key: key);
+
+  final String imageUrl;
+
+  Location? getLocation() {
+    for (var location in locations) {
+      if (location.imageUrl == imageUrl) {
+        return location;
+      }
+    }
+    return null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(getLocation()!.name),
+      ),
+      body: InteractiveViewer(
+        boundaryMargin: const EdgeInsets.all(20.0),
+        maxScale: 5,
+        child: Center(
+          child: Hero(
+            tag: getLocation()!.imageUrl,
+            child: Image.asset(
+              imageUrl,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class Location {
   const Location({
     required this.name,
@@ -331,12 +458,11 @@ class Location {
   final String imageUrl;
 }
 
-// const urlPrefix =
 const locations = [
   Location(
     name: 'Mount Rushmore',
     place: 'U.S.A',
-    imageUrl: 'assets/images/gradiant.jpg',
+    imageUrl: 'assets/images/awesomO.jpg',
   ),
   Location(
     name: 'Gardens By The Bay',
@@ -358,9 +484,5 @@ const locations = [
     place: 'Switzerland',
     imageUrl: 'assets/images/djaj.jpeg',
   ),
-  Location(
-    name: 'Mexico City',
-    place: 'Mexico',
-    imageUrl: 'assets/images/darkhamid.jpeg',
-  ),
+
 ];

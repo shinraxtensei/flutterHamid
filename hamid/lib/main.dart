@@ -1,15 +1,40 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:hamid/scrolling/customs_scrolling_weird.dart';
 
-void main() => runApp(
-      const MaterialApp(
-        title: 'Hamid App',
-        home: CustomScrollingWeird(),
-        debugShowCheckedModeBanner: false,
+void main() {
+  debugRepaintRainbowEnabled = true;
+  runApp(
+    MaterialApp(
+      title: 'Hamid App',
+      home: const CustomScrollingWeird(),
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        scaffoldBackgroundColor: Colors.blue.shade100,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.blue,
+        ),
+        floatingActionButtonTheme: const FloatingActionButtonThemeData(
+          backgroundColor: Colors.blue,
+        ),
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          backgroundColor: Colors.blue,
+        ),
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(
+            color: Colors.blue,
+            fontSize: 20,
+          ),
+        ),
       ),
-    );
+      darkTheme: ThemeData.dark(),
+      themeMode: ThemeMode.system,
+    ),
+  );
+}
 
 class CustomScrollViewHamid extends StatefulWidget {
   const CustomScrollViewHamid({Key? key}) : super(key: key);
@@ -436,3 +461,5 @@ class InheritedWidgetExample extends InheritedWidget {
   bool updateShouldNotify(InheritedWidgetExample oldWidget) =>
       data != oldWidget.data;
 }
+
+
