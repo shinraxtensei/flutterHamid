@@ -462,4 +462,3 @@ class InheritedWidgetExample extends InheritedWidget {
       data != oldWidget.data;
 }
 
-

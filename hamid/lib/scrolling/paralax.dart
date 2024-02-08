@@ -47,8 +47,8 @@ class ExampleParallax extends StatelessWidget {
           flexibleSpace: FlexibleSpaceBar(
             centerTitle: true,
             title: const Padding(
-              padding:  EdgeInsets.only(right: 40),
-              child:  Text('Gallery Hamid'),
+              padding: EdgeInsets.only(right: 50),
+              child: Text('Gallery Hamid'),
             ),
             stretchModes: const [
               StretchMode.zoomBackground,
@@ -93,12 +93,22 @@ class ExampleParallax extends StatelessWidget {
           sliver: SliverList(
             delegate: SliverChildListDelegate(
               [
-                const TextField(
-                  decoration: InputDecoration(  
-                    icon: Icon(Icons.search),
-                    border: UnderlineInputBorder(),
-                    labelText: 'Search',
+                TextFormField(
+                  decoration: const InputDecoration(
+                    icon: Icon(Icons.person),
+                    hintText: 'What do people call you?',
+                    labelText: 'Name *',
                   ),
+                  onSaved: (String? value) {},
+                  onChanged: (String? value) {
+                    // debugPrint(debugDescribeFocusTree());
+                    // print('On change $value');
+                  },
+                  validator: (String? value) {
+                    return (value != null && value.contains('@'))
+                        ? 'Do not use the @ char.'
+                        : null;
+                  },
                 ),
                 for (final location in locations)
                   LocationListItem(
@@ -139,13 +149,50 @@ class LocationListItem extends StatelessWidget {
         aspectRatio: 16 / 9,
         child: GestureDetector(
           onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) {
-                  return Details(imageUrl: imageUrl);
-                },
-              ),
+            showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: Text(name),
+                  content: InteractiveViewer(
+                    maxScale: 5,
+                    child: Image.asset(
+                      imageUrl,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return Details(imageUrl: imageUrl);
+                            },
+                          ),
+                        );
+                      },
+                      child: const Text('Details'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('Close'),
+                    ),
+                  ],
+                );
+              },
             );
+
+            //? - to apply the hero animation
+            // Navigator.of(context).push(
+            //   MaterialPageRoute(
+            //     builder: (context) {
+            //       return Details(imageUrl: imageUrl);
+            //     },
+            //   ),
+            // );
           },
           child: Hero(
             tag: imageUrl,
@@ -484,5 +531,4 @@ const locations = [
     place: 'Switzerland',
     imageUrl: 'assets/images/djaj.jpeg',
   ),
-
 ];
