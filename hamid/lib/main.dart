@@ -1,15 +1,13 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:hamid/scrolling/customs_scrolling_weird.dart';
 
 void main() {
-  debugRepaintRainbowEnabled = true;
+
   runApp(
     MaterialApp(
       title: 'Hamid App',
-      home: const CustomScrollingWeird(),
+      home: const CustomScrollViewHamid(),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -37,7 +35,7 @@ void main() {
 }
 
 class CustomScrollViewHamid extends StatefulWidget {
-  const CustomScrollViewHamid({Key? key}) : super(key: key);
+  const CustomScrollViewHamid({super.key});
 
   @override
   State<CustomScrollViewHamid> createState() => _CustomScrollViewHamidState();
@@ -98,6 +96,9 @@ class _CustomScrollViewHamidState extends State<CustomScrollViewHamid> {
               itemExtent: 100.0,
               delegate: SliverChildListDelegate(
                 [
+
+                  const Text("hamid"),
+                  const Text("said"),
                   Container(color: Colors.red.shade900),
                   Container(color: Colors.purple.shade900),
                   Container(color: Colors.green.shade900),
@@ -186,7 +187,7 @@ Color randomColor() {
 }
 
 class HamidApp extends StatelessWidget {
-  const HamidApp({Key? key}) : super(key: key);
+  const HamidApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -443,10 +444,10 @@ class Cardtouchable extends StatelessWidget {
 
 class InheritedWidgetExample extends InheritedWidget {
   const InheritedWidgetExample({
-    Key? key,
+    super.key,
     required this.data,
-    required Widget child,
-  }) : super(key: key, child: child);
+    required super.child,
+  });
 
   final String data;
 

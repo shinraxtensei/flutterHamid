@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 
 const Color darkBlue = Color.fromARGB(255, 18, 32, 47);
 
@@ -111,14 +110,40 @@ class ExampleParallax extends StatelessWidget {
                   },
                 ),
                 for (final location in locations)
-                  LocationListItem(
-                    imageUrl: location.imageUrl,
-                    name: location.name,
-                    country: location.place,
-                  ).animate().fade(delay: 500.ms).slideX(),
-                const SizedBox(
-                  height: 100,
-                ),
+                  //if the location.available is false wrap the LocationListItem with ColorFiltered
+                  location.available
+                      ? LocationListItem(
+                          imageUrl: location.imageUrl,
+                          name: location.name,
+                          country: location.place,
+                        )
+                      : ColorFiltered(
+                          colorFilter: const ColorFilter.mode(
+                            Colors.grey,
+                            BlendMode.saturation,
+                          ),
+                          child: Stack(
+                            children: [
+                              LocationListItem(
+                                imageUrl: location.imageUrl,
+                                name: location.name,
+                                country: location.place,
+                              ),
+                              const Positioned(
+                                top: 100,
+                                left: 100,
+                                child: Text(
+                                  'UNAVAILABLE',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.w900,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
               ],
             ),
           ),
@@ -457,7 +482,7 @@ bool isImageUrlInLocations(String imageUrl) {
 }
 
 class Details extends StatelessWidget {
-  const Details({Key? key, required this.imageUrl}) : super(key: key);
+  const Details({super.key, required this.imageUrl});
 
   final String imageUrl;
 
@@ -497,11 +522,13 @@ class Location {
   const Location({
     required this.name,
     required this.place,
+    required this.available,
     required this.imageUrl,
   });
 
   final String name;
   final String place;
+  final bool available;
   final String imageUrl;
 }
 
@@ -509,26 +536,31 @@ const locations = [
   Location(
     name: 'Mount Rushmore',
     place: 'U.S.A',
+    available: true,
     imageUrl: 'assets/images/awesomO.jpg',
   ),
   Location(
     name: 'Gardens By The Bay',
     place: 'Singapore',
+    available: false,
     imageUrl: 'assets/images/berserk.png',
   ),
   Location(
     name: 'Mexico City',
     place: 'Mexico',
+    available: true,
     imageUrl: 'assets/images/darkhamid.jpeg',
   ),
   Location(
     name: 'Machu Picchu',
     place: 'Peru',
+    available: true,
     imageUrl: 'assets/images/retards.jpg',
   ),
   Location(
     name: 'Vitznau',
     place: 'Switzerland',
+    available: false,
     imageUrl: 'assets/images/djaj.jpeg',
   ),
 ];
